@@ -1,5 +1,3 @@
-using System;
-
 namespace api.crud_cliente.src.Models;
 
 public class Cliente
@@ -11,4 +9,12 @@ public class Cliente
     public required string Email { get; set; }
     public required string Celular { get; set; }
     public required decimal RendaMensal { get; set; }
+}
+
+public class ClienteResposta
+{
+    public Guid Id { get; set; }
+    public string NomeCompleto { get; set; }
+    public string Email { get; set; }
+    public string Celular { get; set; }
 }
