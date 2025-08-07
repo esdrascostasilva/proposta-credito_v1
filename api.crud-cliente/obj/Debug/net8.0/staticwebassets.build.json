@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "xm9YvrHdETEOIyxEy5pjBf9PLjsUUCPVlOXmTcK3Q30=",
+  "Source": "api.crud-cliente",
+  "BasePath": "_content/api.crud-cliente",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
