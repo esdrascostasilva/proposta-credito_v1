@@ -1,4 +1,6 @@
 using api.crud_cliente.src.Data;
+using api.crud_cliente.src.Service;
+using api.crud_cliente.src.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<ClienteContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IClienteService, ClienteService>();
 
 var app = builder.Build();
 
