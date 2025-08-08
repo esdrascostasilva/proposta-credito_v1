@@ -29,3 +29,11 @@ public class ClienteRequisicao
     public required string Celular { get; set; }
     public required decimal RendaMensal { get; set; }
 }
+
+public class ClienteCriadoEvento
+{
+    public Guid Id { get; set; }
+    public string Nome { get; set; }
+    public string CPF { get; set; }
+    public decimal RendaMensal { get; set; }
+}
