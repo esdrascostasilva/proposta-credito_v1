@@ -14,7 +14,7 @@ public class ClienteAprovadoEvento
 
 public class ClienteCartaoCredito
 {
-    public required Guid Id { get; set; }
+    public Guid Id { get; set; }
     public required string NomeTitular { get; set; }
     public required string Numero { get; set; }
     public required string Validade { get; set; }
