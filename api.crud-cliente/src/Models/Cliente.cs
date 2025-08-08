@@ -2,6 +2,13 @@ namespace api.crud_cliente.src.Models;
 
 public class Cliente
 {
+    public Cliente(string cpf)
+    {
+        if (cpf.Length != 11)
+            throw new ArgumentException("Documento CPF deve conter 11 digitos");
+
+        CPF = cpf;
+    }
     public required Guid Id { get; set; }
     public required string Nome { get; set; }
     public required string Sobrenome { get; set; }
