@@ -25,7 +25,17 @@ public class AvaliadorHandler
 
         if (avaliacao.estaElegivel)
         {
-            await _publisher.PublicarAsync("FILA_CLIENTES_ELEGIVEIS", cliente);
+            var clienteElegivel = new ClienteElegivel
+            {
+                Id = avaliacao.Id,
+                Nome = cliente.Nome,
+                CPF = cliente.CPF,
+                Email = cliente.Email,
+                RendaMensal = avaliacao.RendaMensal,
+                ValorCreditoAprovado = avaliacao.ValorCreditoOferecido
+            };
+
+            await _publisher.PublicarAsync("FILA_CLIENTES_ELEGIVEIS", clienteElegivel);
         }
     }
 }
