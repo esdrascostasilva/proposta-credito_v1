@@ -35,7 +35,7 @@ public class AvaliadorHandler
                 ValorCreditoAprovado = avaliacao.ValorCreditoOferecido
             };
 
-            await _publisher.PublicarAsync("FILA_CLIENTES_ELEGIVEIS", clienteElegivel);
+            await _publisher.PublicarAsync("clientes.elegiveis", clienteElegivel);
         }
     }
 }
