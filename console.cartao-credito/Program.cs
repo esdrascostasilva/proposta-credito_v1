@@ -13,6 +13,7 @@ var builder = Host.CreateDefaultBuilder(args)
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(connectionString));
 
+        services.AddSingleton<RabbitMQCartaoConsumer>();
     });
 
 var host = builder.Build();
