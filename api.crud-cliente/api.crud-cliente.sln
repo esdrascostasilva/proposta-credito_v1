@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api.crud-cliente", "api.cru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console.analise-credito", "..\console.analise-credito\console.analise-credito.csproj", "{E33E748F-1E25-4D63-AB3C-836BA5CE1543}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console.cartao-credito", "..\console.cartao-credito\console.cartao-credito.csproj", "{2F31C4B6-8D59-46A6-B08D-055B5FA334C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{E33E748F-1E25-4D63-AB3C-836BA5CE1543}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E33E748F-1E25-4D63-AB3C-836BA5CE1543}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E33E748F-1E25-4D63-AB3C-836BA5CE1543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F31C4B6-8D59-46A6-B08D-055B5FA334C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F31C4B6-8D59-46A6-B08D-055B5FA334C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F31C4B6-8D59-46A6-B08D-055B5FA334C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F31C4B6-8D59-46A6-B08D-055B5FA334C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
