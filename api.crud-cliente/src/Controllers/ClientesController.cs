@@ -1,8 +1,6 @@
 
 using api.crud_cliente.src.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace api.crud_cliente.src.Controllers
 {
@@ -11,20 +9,10 @@ namespace api.crud_cliente.src.Controllers
     public class ClientesController : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<Cliente>>> GetAllClientes()
+        public async Task<ActionResult<List<ClienteResposta>>> GetTodosClientes()
         {
-            var cliente = new Cliente
-            {
-                Id = Guid.NewGuid(),
-                Nome = "Esdras",
-                Sobrenome = "Costa",
-                CPF = "37428208858",
-                Email = "esdras.cts@outlook.com",
-                Celular = "15988253887",
-                RendaMensal = 2000.0m
-            };
-            
-            return Ok(cliente);
+            var teste = new ClienteResposta();
+            return Ok(teste);
         }
     }
 }
