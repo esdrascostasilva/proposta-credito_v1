@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("api.crud-cliente")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7bbd2f8e51412863163599d184e0de6d4896b728")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb8e1495ae7b40e464d610b6cdf1d254b9515f5e")]
 [assembly: System.Reflection.AssemblyProductAttribute("api.crud-cliente")]
 [assembly: System.Reflection.AssemblyTitleAttribute("api.crud-cliente")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

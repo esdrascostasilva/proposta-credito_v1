@@ -1,5 +1,6 @@
 using System;
 using api.crud_cliente.src.Data;
+using api.crud_cliente.src.Evento.Interface;
 using api.crud_cliente.src.Models;
 using api.crud_cliente.src.Service.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,12 @@ namespace api.crud_cliente.src.Service;
 public class ClienteService : IClienteService
 {
     private readonly ClienteContext _context;
+    private readonly IEventBus _eventBus;
 
-    public ClienteService(ClienteContext context)
+    public ClienteService(ClienteContext context, IEventBus eventBus)
     {
         _context = context;
+        _eventBus = eventBus;
     }
 
     public async Task<List<ClienteResposta>> GetTodosClientesAsync()
@@ -58,6 +61,15 @@ public class ClienteService : IClienteService
 
         _context.Clientes.Add(novoCliente);
         await _context.SaveChangesAsync();
+
+        _eventBus.Publish(new ClienteCriadoEvento
+        {
+            Id = novoCliente.Id,
+            Nome = novoCliente.Nome,
+            CPF = novoCliente.CPF,
+            RendaMensal = novoCliente.RendaMensal
+        }, "clientes.criados");
+
 
         return new ClienteResposta
         {
