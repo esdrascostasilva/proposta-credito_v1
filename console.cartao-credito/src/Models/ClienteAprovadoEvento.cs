@@ -12,7 +12,7 @@ public class ClienteAprovadoEvento
     public decimal ValorCreditoAprovado { get; set; }
 }
 
-public class ClienteCratoaCredito
+public class ClienteCartaoCredito
 {
     public required Guid Id { get; set; }
     public required string NomeTitular { get; set; }
