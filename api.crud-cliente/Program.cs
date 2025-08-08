@@ -1,4 +1,6 @@
 using api.crud_cliente.src.Data;
+using api.crud_cliente.src.Evento;
+using api.crud_cliente.src.Evento.Interface;
 using api.crud_cliente.src.Service;
 using api.crud_cliente.src.Service.Interface;
 using api.crud_cliente.src.Utils;
@@ -25,6 +27,8 @@ builder.Services.AddScoped<IClienteService, ClienteService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddSingleton<IEventBus, RabbitMQEvent>();
 
 // Registra todos os validadores do assembly atual
 builder.Services.AddValidatorsFromAssemblyContaining<ValidadorClienteRequisicao>();
