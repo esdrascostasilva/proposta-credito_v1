@@ -1,0 +1,31 @@
+using console.analise_credito.src.Data;
+using console.analise_credito.src.Evento.Publisher;
+using console.analise_credito.src.Models;
+using console.analise_credito.src.Service;
+
+public class AvaliadorHandler
+{
+    private readonly AvaliadorCreditoService _avaliador;
+    private readonly IMessagePublisher _publisher;
+    private readonly DataContext _dbContext;
+
+    public AvaliadorHandler(AvaliadorCreditoService avaliador, IMessagePublisher publisher, DataContext dbContext)
+    {
+        _avaliador = avaliador;
+        _publisher = publisher;
+        _dbContext = dbContext;
+    }
+
+    public async Task ProcessarCliente(Cliente cliente)
+    {
+        var avaliacao = _avaliador.Avaliar(cliente);
+
+        _dbContext.AvaliacoesClientes.Add(avaliacao);
+        await _dbContext.SaveChangesAsync();
+
+        if (avaliacao.estaElegivel)
+        {
+            await _publisher.PublicarAsync("FILA_CLIENTES_ELEGIVEIS", cliente);
+        }
+    }
+}
