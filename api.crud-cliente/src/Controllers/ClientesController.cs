@@ -37,6 +37,9 @@ namespace api.crud_cliente.src.Controllers
         [HttpPost]
         public async Task<ActionResult<ClienteResposta>> CriarCliente([FromBody] ClienteRequisicao clienteRequisicao)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var novoCliente = await _clienteService.CriarClienteAsync(clienteRequisicao);
 
             return CreatedAtAction(nameof(ObterClientePorId), new { id = novoCliente.Id }, novoCliente);

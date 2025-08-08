@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "wEeq/1KKZxx0MEKK7xeIJ5vL/yuOPPn1Ud+6T/l5I6ZZrBP0kalfXlPR2QVONK1Rh3hEQ07v3vJKX2JKdGLJxw==",
+  "dgSpecHash": "RdqEeHAvKT+VMm2e6qkyGFEafycLgh7eUTPE+2qzVChu6uR8+Gv0qrGpGRlV5Q6RM8nSll1JXlwHEw9QT8ayyg==",
   "success": true,
   "projectFilePath": "/Users/esdrascosta/Projects/proposta-credito/api.crud-cliente/api.crud-cliente.csproj",
   "expectedPackageFiles": [
     "/Users/esdrascosta/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/esdrascosta/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
+    "/Users/esdrascosta/.nuget/packages/fluentvalidation/12.0.0/fluentvalidation.12.0.0.nupkg.sha512",
+    "/Users/esdrascosta/.nuget/packages/fluentvalidation.aspnetcore/11.3.1/fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",
+    "/Users/esdrascosta/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.11.0/fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
     "/Users/esdrascosta/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/esdrascosta/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "/Users/esdrascosta/.nuget/packages/microsoft.codeanalysis.analyzers/3.3.3/microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
