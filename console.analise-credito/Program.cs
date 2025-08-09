@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using console.analise_credito.src.Data;
 using console.analise_credito.src.Evento.Consumer;
 using Microsoft.Extensions.Configuration;
+using console.analise_credito.src.Service;
+using console.analise_credito.src.Evento.Publisher;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -11,6 +13,9 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
 
+        services.AddScoped<AvaliadorCreditoService>();
+        services.AddScoped<IMessagePublisher, RabbitMqMessagePublisher>();
+        services.AddScoped<AvaliadorHandler>();
         services.AddSingleton<RabbitMQEventoConsumer>();
     })
     .Build();
