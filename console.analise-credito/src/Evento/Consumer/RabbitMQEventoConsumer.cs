@@ -104,7 +104,7 @@ public class RabbitMQEventoConsumer
         };
 
         channel.BasicConsume(queue: _queueName, autoAck: false, consumer: consumer);
-        Console.WriteLine("Aguardando mensagens. Pressione [enter] para sair.");
+        Console.WriteLine("Aguardando mensagens. Pressione [enter] para sair");
         Console.ReadLine();
     }
 
