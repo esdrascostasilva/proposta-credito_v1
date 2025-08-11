@@ -67,6 +67,7 @@ public class ClienteService : IClienteService
             Id = novoCliente.Id,
             Nome = novoCliente.Nome,
             CPF = novoCliente.CPF,
+            Email = novoCliente.Email,
             RendaMensal = novoCliente.RendaMensal
         }, "clientes.criados");
 
