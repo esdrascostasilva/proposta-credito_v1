@@ -11,8 +11,6 @@ public class RabbitMQEventoConsumer
     private readonly string _queueName = "clientes.criados";
     private readonly AvaliadorHandler _avaliadorHandler;
 
-    // implementando retry e DLQ
-    private readonly string _dlqQueueName = "clientes.criados.dql";
     private const int MaxRetries = 3;
 
     public RabbitMQEventoConsumer(AvaliadorHandler avaliadorHandler)
@@ -29,29 +27,7 @@ public class RabbitMQEventoConsumer
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        // criando a fila DLQ
-        channel.QueueDeclare(
-            queue: _dlqQueueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null
-        );
-
-        // criando a fila principal que aponta pra DLQ
-        var mainQueueArgs = new Dictionary<string, object>
-        {
-            { "x-dead-letter-exchange", "" }, // "" significa default exchange
-            { "x-dead-letter-routing-key", _dlqQueueName }
-        };
-
-        channel.QueueDeclare(
-            queue: _queueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: mainQueueArgs
-        );
+        DeclaraFilaComDLQ(channel, _queueName); // chamei o metodo aqui
 
         var consumer = new EventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -108,4 +84,33 @@ public class RabbitMQEventoConsumer
         Console.ReadLine();
     }
 
+    public static void DeclaraFilaComDLQ(IModel channel, string queueName)
+    {
+        // Nome da fila dlq
+        string dlqName = $"{queueName}.dlq";
+
+        // Declara a DLQ
+        channel.QueueDeclare(
+            queue: dlqName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        );
+
+        // Declara a fila principal com DLQ configurada
+        var args = new Dictionary<string, object>
+        {
+            { "x-dead-letter-exchange", "" },
+            { "x-dead-letter-routing-key", dlqName }
+        };
+
+        channel.QueueDeclare(
+            queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: args
+        );
+    }
 }

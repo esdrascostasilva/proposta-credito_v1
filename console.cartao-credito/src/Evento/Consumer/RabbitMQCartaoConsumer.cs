@@ -12,9 +12,6 @@ public class RabbitMQCartaoConsumer
 {
     private readonly IServiceScopeFactory _scopedFactory;
     private readonly string _queueName = "clientes.elegiveis";
-
-    // DLQ + retry
-    private readonly string _dlqQueueName = "clientes.elegiveis.dlq";
     private const int MaxRetries = 3;
 
     public RabbitMQCartaoConsumer(IServiceScopeFactory scopeFactory)
@@ -28,29 +25,14 @@ public class RabbitMQCartaoConsumer
         var connection = factory.CreateConnection();
         var channel = connection.CreateModel();
 
-        // DLQ
-        channel.QueueDeclare(
-            queue: _dlqQueueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null
-        );
-
-        // principal com DLQ
-        var mainQueueArgs = new Dictionary<string, Object>
+        try
         {
-            { "x-dead-letter-exchange", "" },
-            { "x-dead-letter-routing-key", _dlqQueueName }
-        };
-
-        channel.QueueDeclare(
-            queue: _queueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: mainQueueArgs
-        );
+            channel.QueueDeclarePassive(_queueName); // verificando a fila antes de criar para evitar o erro RabbitMQ.Client.Exceptions.OperationInterruptedException: The AMQP
+        }
+        catch (RabbitMQ.Client.Exceptions.OperationInterruptedException)
+        {
+            DeclaraFilaComDLQ(channel, _queueName);
+        }
 
         var consumer = new EventingBasicConsumer(channel);
 
@@ -62,6 +44,7 @@ public class RabbitMQCartaoConsumer
             try
             {
                 var dadosEvento = JsonSerializer.Deserialize<ClienteAprovadoEvento>(json);
+
                 using var scope = _scopedFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
@@ -76,7 +59,7 @@ public class RabbitMQCartaoConsumer
 
                 context.ClientesCartaoCredito.Add(novoCartao);
                 await context.SaveChangesAsync();
-                
+
                 Console.WriteLine($"Cartao de credito gerado para {dadosEvento.Nome} com limite de {dadosEvento.ValorCreditoAprovado}");
                 channel.BasicAck(ea.DeliveryTag, false);
             }
@@ -85,7 +68,8 @@ public class RabbitMQCartaoConsumer
                 Console.WriteLine($"Erro ao processar: {ex.Message}");
 
                 int retryCount = 0;
-                if (ea.BasicProperties.Headers != null && ea.BasicProperties.Headers.ContainsKey("x-retry-count"))
+                if (ea.BasicProperties.Headers != null &&
+                    ea.BasicProperties.Headers.ContainsKey("x-retry-count"))
                 {
                     retryCount = Convert.ToInt32(ea.BasicProperties.Headers["x-retry-count"]);
                 }
@@ -108,17 +92,45 @@ public class RabbitMQCartaoConsumer
                     Console.WriteLine("Mensagem enviada para DLQ");
                 }
             }
-            
-            channel.BasicConsume(queue: _queueName, autoAck: false, consumer: consumer);
-            Console.WriteLine("Aguardando mensagens. Pressione [enter] para sair");
         };
 
-        
+        // Registro de consumo fica FORA do evento
+        channel.BasicConsume(queue: _queueName, autoAck: false, consumer: consumer);
+
+        Console.WriteLine("Aguardando mensagens. Pressione [enter] para sair");
+        Console.ReadLine();
     }
 
     private string GerarNumeroCartao()
     {
         var random = new Random();
         return string.Join("", Enumerable.Range(0, 4).Select(_ => random.Next(1000, 9999).ToString()));
+    }
+
+    public static void DeclaraFilaComDLQ(IModel channel, string queueName)
+    {
+        string dlqName = $"{queueName}.dlq";
+
+        channel.QueueDeclare(
+            queue: dlqName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        );
+
+        var args = new Dictionary<string, object>
+        {
+            { "x-dead-letter-exchange", "" },
+            { "x-dead-letter-routing-key", dlqName }
+        };
+
+        channel.QueueDeclare( // erro nessa linha
+            queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: args
+        );
     }
 }

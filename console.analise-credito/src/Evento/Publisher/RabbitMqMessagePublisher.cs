@@ -17,22 +17,15 @@ public class RabbitMqMessagePublisher : IMessagePublisher, IDisposable
 
     public Task PublicarAsync<T>(string queueName, T message)
     {
-        _channel.QueueDeclare(queue: queueName,
-                              durable: true,
-                              exclusive: false,
-                              autoDelete: false,
-                              arguments: null);
+        DeclaraFilaComDLQ(_channel, queueName);
 
-        var json = JsonSerializer.Serialize(message);
-        var body = Encoding.UTF8.GetBytes(json);
+        var jsonMessage = JsonSerializer.Serialize(message);
+        var body = Encoding.UTF8.GetBytes(jsonMessage);
 
         var properties = _channel.CreateBasicProperties();
         properties.Persistent = true;
 
-        _channel.BasicPublish(exchange: "",
-                              routingKey: queueName,
-                              basicProperties: properties,
-                              body: body);
+        _channel.BasicPublish("", queueName, properties, body);
 
         return Task.CompletedTask;
     }
@@ -43,5 +36,35 @@ public class RabbitMqMessagePublisher : IMessagePublisher, IDisposable
         _connection?.Close();
         _channel?.Dispose();
         _connection?.Dispose();
+    }
+
+    public static void DeclaraFilaComDLQ(IModel channel, string queueName)
+    {
+        // Nome da fila dlq
+        string dlqName = $"{queueName}.dlq";
+
+        // Declara a DLQ
+        channel.QueueDeclare(
+            queue: dlqName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        );
+
+        // Declara a fila principal com DLQ configurada
+        var args = new Dictionary<string, object>
+        {
+            { "x-dead-letter-exchange", "" },
+            { "x-dead-letter-routing-key", dlqName }
+        };
+
+        channel.QueueDeclare(
+            queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: args
+        );
     }
 }

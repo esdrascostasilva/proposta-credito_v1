@@ -20,8 +20,11 @@ public class AvaliadorHandler
     {
         var avaliacao = _avaliador.Avaliar(cliente);
 
-        _dbContext.AvaliacoesClientes.Add(avaliacao);
-        await _dbContext.SaveChangesAsync();
+        if (!_dbContext.AvaliacoesClientes.Any(a => a.Id == avaliacao.Id))
+        {
+            _dbContext.AvaliacoesClientes.Add(avaliacao);
+            await _dbContext.SaveChangesAsync();
+        }
 
         if (avaliacao.estaElegivel)
         {
@@ -35,7 +38,10 @@ public class AvaliadorHandler
                 ValorCreditoAprovado = avaliacao.ValorCreditoOferecido
             };
 
+            Console.WriteLine($"[Publish] Publicando mensagem para clientes.elegiveis");
             await _publisher.PublicarAsync("clientes.elegiveis", clienteElegivel);
+            Console.WriteLine($"[Publish] Mensagem publicada");
+
         }
     }
 }

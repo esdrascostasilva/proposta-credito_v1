@@ -14,7 +14,7 @@ var host = Host.CreateDefaultBuilder(args)
             options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<AvaliadorCreditoService>();
-        services.AddScoped<IMessagePublisher, RabbitMqMessagePublisher>();
+        services.AddSingleton<IMessagePublisher, RabbitMqMessagePublisher>();
         services.AddScoped<AvaliadorHandler>();
         services.AddSingleton<RabbitMQEventoConsumer>();
     })
