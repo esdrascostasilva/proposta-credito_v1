@@ -66,5 +66,13 @@ namespace api.crud_cliente.src.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id}/aceitar-proposta")]
+        public async Task<ActionResult> AceitarProposta(Guid id)
+        {
+            // Ajustar a classe servico
+            
+            return Ok("Teste");
+        }
     }
 }
